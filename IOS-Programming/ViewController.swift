@@ -7,57 +7,39 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    lazy var imagePicker: UIImagePickerController = {
+        let picker: UIImagePickerController = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        return picker
+    }()
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBAction func touchUpSelectImageButton(_ sender: UIButton) {
+        self.present(self.imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let originalImage: UIImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.imageView.image = originalImage
+        }
+        
+        self.dismiss(animated: true, completion: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 메모리에 로드 됨")
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 화면에 보여질 예정")
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 화면에 보여짐")
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 화면에서 사라질 예정")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 화면에서 사라짐")
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 subview를 레이아웃 하려함")
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // Do any additional setup after loading the view.
-        
-        print("ViewController의 view가 subview를 레이아웃 함")
-    }
-
     
-}
+    
 
+}
