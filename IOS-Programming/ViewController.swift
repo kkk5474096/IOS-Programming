@@ -7,37 +7,42 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController {
     
-    lazy var imagePicker: UIImagePickerController = {
-        let picker: UIImagePickerController = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.delegate = self
-        return picker
+    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var dateLabel: UILabel!
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        //formatter.dateFormat = "yyyy/MM/dd hh:mm:ss" 우리가 원하는 형식으로도 가능
+        return formatter
     }()
     
-    @IBOutlet weak var imageView: UIImageView!
-    
-    @IBAction func touchUpSelectImageButton(_ sender: UIButton) {
-        self.present(self.imagePicker, animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    @IBAction func didDatePickerValueChanged(_ sender: UIDatePicker) {
+        print("value change")
         
-        if let originalImage: UIImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            self.imageView.image = originalImage
-        }
+        let date: Date = sender.date
+        //let date: Date = self.datePicker.date  outlet으로 선언된상황에서는 이것도 가능
+        let dateString: String = self.dateFormatter.string(from: date)
         
-        self.dismiss(animated: true, completion: nil)
+        self.dateLabel.text = dateString
+        
     }
-
+    
+//    @IBOutlet weak var nameField: UITextField!
+//    @IBOutlet weak var ageField: UITextField!
+//    
+//    @IBAction func touchUpsetButton(_ sender: UIButton) {
+//        UserInformation.shared.name = nameField.text
+//        UserInformation.shared.age = ageField.text
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        self.datePicker.addTarget(self, action: #selector(self.didDatePickerValueChanged(_:)), for: UIControl.Event.valueChanged)
     }
     
     
